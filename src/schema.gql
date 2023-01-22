@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Response {
+  message: String!
+}
+
+type Score {
+  id: Int!
+  game: String!
+  points: Int!
+  player: String!
+  playingTime: Int!
+}
+
+type Player {
+  name: String!
+  points: Int!
+}
+
+type Ranking {
+  place: Int!
+  player: String!
+  points: Int!
+}
+
+type Query {
+  getScores: [Score!]!
+  getPlayers: [Player!]!
+}
+
+type Mutation {
+  createScore(score: ScoreInput!): Response!
+}
+
+input ScoreInput {
+  game: String!
+  points: Int!
+  player: String!
+  playingTime: Int!
+}
+
+type Subscription {
+  rankingUpdated: [Ranking!]!
+}
