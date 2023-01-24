@@ -1,30 +1,34 @@
 import { Injectable } from "@nestjs/common";
-import { of, retry, tap } from "rxjs";
-import { ScoreRepository } from "../../persistence/repositories/score.repository";
-import { Score } from "../model/Score";
+import { map, Observable, of, retry, switchMap, tap, toArray } from "rxjs";
+import { SaveScoreDto } from "../dto/SaveScoreDto";
 import { ScoreSubject } from "./libs/subjects/score.subject";
+import { Score } from "../model/Score";
+import { ScoreMongoRepository } from "../../persistence/repositories/score-mongo.repository";
 
 @Injectable()
 export class ScoreService {
 
     constructor(
-        private readonly repository: ScoreRepository,
+        private readonly repository: ScoreMongoRepository,
         private readonly source: ScoreSubject
     ) { }
 
-    save(score: Score) {
-        return of(score).pipe(
-            tap(score => this.repository.save(score)),
+    save(dto: SaveScoreDto): Observable<Score> {
+        return of(dto).pipe(
+            map(dto => Score.create(dto)),
+            switchMap(score => this.repository.create(score)),
             retry({ count: 3, delay: 3000 }),
             tap(score => this.source.emit(score)),
         )
     }
 
-    findAll() {
-        return of(this.repository.findAll())
+    findAll(): Observable<Score[]> {
+        return this.repository.stream().pipe(
+            toArray(),
+        )
     }
 
-    onSaved() {
+    onSaved(): Observable<Score> {
         return this.source.onEmited()
     }
 

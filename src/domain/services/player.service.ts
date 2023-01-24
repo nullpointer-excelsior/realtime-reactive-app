@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { EMPTY, of, retry, tap } from "rxjs";
-import { PlayerRepository } from "../../persistence/repositories/player.repository";
+import { defaultIfEmpty, EMPTY, find, Observable, of, retry, switchMap, tap, toArray } from "rxjs";
+import { PlayerMongoRepository } from "../../persistence/repositories/player-mongo.repository";
 import { Player } from "../model/Player";
 import { ReactiveBase } from "./libs/rx/reactive.base";
 import { PlayerSubject } from "./libs/subjects/player.subject";
@@ -9,28 +9,38 @@ import { PlayerSubject } from "./libs/subjects/player.subject";
 export class PlayerService extends ReactiveBase {
 
     constructor(
-        private repository: PlayerRepository,
-        private source: PlayerSubject
+        private source: PlayerSubject,
+        private repository: PlayerMongoRepository
     ) { super() }
 
-    findByName(name: string) {
-        const player = this.repository.findByName(name)
-        if (player) {
-            return of(player)
-        }
-        return EMPTY
+    findByName(name: string): Observable<Player> {
+
+        return this.repository.stream().pipe(
+            find(player => player.name === name),
+            switchMap(player => player ? of(player) : EMPTY)
+        )
+
     }
 
-    findAll() {
-        return this.findMultiple(() => this.repository.findAll())
+    findAll(): Observable<Player[]> {
+        return this.repository.stream().pipe(
+            toArray(),
+        )
     }
 
-    save(player: Player) {
+    saveOrUpdate(player: Player) {
+        
         return of(player).pipe(
-            tap(player => this.repository.save(player)),
+            switchMap(player => {
+                return this.repository.findById(player.id).pipe(
+                    defaultIfEmpty(null)
+                )
+            }),
+            switchMap(doc => doc ? this.repository.update(player) : this.repository.create(player)),
             retry({ count: 3, delay: 3000 }),
             tap(player => this.source.emit(player))
         )
+
     }
 
     onSaved() {

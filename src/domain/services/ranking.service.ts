@@ -1,17 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { from, map, of, take, tap, toArray } from "rxjs";
+import { of, tap } from "rxjs";
 import { Player } from "../model/Player";
 import { Ranking } from "../model/Ranking";
-import { PlayerService } from "./player.service";
 import { RankingSubject } from "./libs/subjects/ranking.subject";
 
 @Injectable()
 export class RankingService {
 
-    constructor(
-        private readonly player: PlayerService,
-        private readonly source: RankingSubject
-    ) { }
+    constructor(private readonly source: RankingSubject) { }
     
     save(rankings: Ranking[]) {
         return of(rankings).pipe(
@@ -21,15 +17,6 @@ export class RankingService {
 
     onSaved() {
         return this.source.onEmited()
-    }
-
-
-    getTop(limit: number) {
-        return this.player.findAll().pipe(
-            take(limit),
-            toArray(),
-            map(players => this.createRanking(players)),
-        )
     }
 
     createRanking(players: Player[]) {
