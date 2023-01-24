@@ -18,28 +18,24 @@ export class SavePlayerService implements OnModuleInit {
         Logger.log('save-player STARTED')
 
         this.score.onSaved().pipe(
-            map(score => new Player({
-                name: score.player,
-                points: score.points
-            })),
-            switchMap(player => {
+            tap(score => console.log('save-player-from-score', score)),
+            switchMap(score => {
                 return this.player
-                    .findByName(player.name)
+                    .findByName(score.player)
                     .pipe(
-                        defaultIfEmpty(new Player({
-                            name: player.name,
-                            points: 0
-                        })),
-                        map(playerFound => new Player({
-                            name: playerFound.name,
-                            points: playerFound.points + player.points
-                        }))
+                        defaultIfEmpty(Player.create({ name: score.player, points: 0 })),
+                        map(player => {
+                            player.addPoints(score.points)
+                            return player
+                        })
                     )
             }),
-            tap(x => console.log('saved', x.toString())),
-            switchMap(player => this.player.save(player)),
+            switchMap(player => this.player.saveOrUpdate(player)),
         )
-            .subscribe(player => Logger.log(`${player.toString()} Saved`))
+            .subscribe({ 
+                next: player => Logger.log(`${player.toString()} Saved`),
+                error: err => Logger.error(err)
+            })
 
 
     }

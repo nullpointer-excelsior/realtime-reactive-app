@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
-import { map, switchMap, toArray } from "rxjs";
+import { map, switchMap } from "rxjs";
 import { Player } from "../../../domain/model/Player";
 import { PlayerService } from "../../../domain/services/player.service";
 import { Ranking } from "../../../domain/model/Ranking";
@@ -40,7 +40,6 @@ export class SaveRankingService implements OnModuleInit {
         }
 
         return this.player.findAll().pipe(
-            toArray(),
             map(players => createRanking(players))
         )
 

@@ -3,7 +3,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class Score {
 
-    @Field(type => Int)
+    @Field(type => String)
     id: number;
 
     @Field()
