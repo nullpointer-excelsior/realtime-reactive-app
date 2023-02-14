@@ -18,7 +18,7 @@ export class Score {
     @Field(type => Int)
     playingTime: number;
     
-    // submitedAt: Date;
-
+    @Field()
+    submitedAt: Date;
 
 }

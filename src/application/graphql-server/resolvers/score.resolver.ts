@@ -18,7 +18,7 @@ export class ScoreResolver {
 
     @Mutation(returns => Response)
     createScore(@Args('score') score: ScoreInput): Response {
-        this.score.save({ ...score, submitedAt: new Date() }).subscribe()
+        this.score.save({ ...score }).subscribe()
         return {
             message: 'OK'
         }

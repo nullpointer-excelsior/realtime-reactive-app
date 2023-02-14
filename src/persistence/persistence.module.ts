@@ -5,6 +5,8 @@ import { PlayerSchema } from './model/PlayerModel';
 import { ScoreMongoRepository } from './repositories/score-mongo.repository';
 import { PlayerMongoRepository } from './repositories/player-mongo.repository';
 
+const DATABASE = 'ranking-db'
+
 const providersToExport = [
     ScoreMongoRepository,
     PlayerMongoRepository
@@ -18,7 +20,7 @@ const providersToExport = [
         ...providersToExport,
     ],
     imports: [
-        MongooseModule.forRoot(`mongodb://rx:rx@localhost:27017/rx?authSource=admin`),
+        MongooseModule.forRoot(`mongodb://${DATABASE}:${DATABASE}@localhost:27017/${DATABASE}?authSource=admin`),
         MongooseModule.forFeature([
             { name: 'score', schema: ScoreSchema },
             { name: 'player', schema: PlayerSchema },

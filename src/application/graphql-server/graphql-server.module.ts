@@ -8,7 +8,8 @@ import { PubSub } from 'graphql-subscriptions';
 import { PubSubService } from './services/pubsub.service';
 import { RankingResolver } from './resolvers/ranking.resolver';
 import { GRAPHQL_PUB_SUB } from './contants';
-import { RankingUpdatedService } from './services/ranking-updated.service';
+import { DateScalar } from './model/date.scalar';
+import { ChampionResolver } from './resolvers/champion.resolver';
 
 
 const providersToExport = [
@@ -20,7 +21,8 @@ const providersToExport = [
         ScoreResolver,
         PlayerResolver,
         RankingResolver,
-        RankingUpdatedService,
+        ChampionResolver,
+        DateScalar,
         {
             provide: GRAPHQL_PUB_SUB,
             useValue: new PubSub(),
@@ -32,6 +34,9 @@ const providersToExport = [
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             installSubscriptionHandlers: true,
+            buildSchemaOptions: {
+                dateScalarMode: 'timestamp',
+              }
         }),
     ],
     exports: [

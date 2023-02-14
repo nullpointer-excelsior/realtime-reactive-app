@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { RankingService } from "../../../domain/services/ranking.service";
-import { PubSubService } from "./pubsub.service";
+import { PubSubService } from "../../graphql-server/services/pubsub.service";
 
 @Injectable()
 export class RankingUpdatedService implements OnModuleInit {

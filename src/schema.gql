@@ -7,11 +7,12 @@ type Response {
 }
 
 type Score {
-  id: Int!
+  id: String!
   game: String!
   points: Int!
   player: String!
   playingTime: Int!
+  submitedAt: Date!
 }
 
 type Player {
@@ -24,6 +25,15 @@ type Ranking {
   player: String!
   points: Int!
 }
+
+type Champion {
+  player: String!
+  points: Int!
+  datetime: Date!
+}
+
+"""Date custom scalar type"""
+scalar Date
 
 type Query {
   getScores: [Score!]!
@@ -39,8 +49,10 @@ input ScoreInput {
   points: Int!
   player: String!
   playingTime: Int!
+  submitedAt: Date!
 }
 
 type Subscription {
   rankingUpdated: [Ranking!]!
+  currentChampion: Champion!
 }

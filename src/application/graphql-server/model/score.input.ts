@@ -20,4 +20,7 @@ export class ScoreInput {
     @Field(type => Int)
     playingTime: number;
 
+    @Field()
+    submitedAt: Date;
+
 }

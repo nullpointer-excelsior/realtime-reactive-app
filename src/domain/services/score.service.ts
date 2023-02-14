@@ -15,7 +15,9 @@ export class ScoreService {
 
     save(dto: SaveScoreDto): Observable<Score> {
         return of(dto).pipe(
+            
             map(dto => Score.create(dto)),
+            tap(x => console.log('with-date', x)),
             switchMap(score => this.repository.create(score)),
             retry({ count: 3, delay: 3000 }),
             tap(score => this.source.emit(score)),
@@ -25,6 +27,7 @@ export class ScoreService {
     findAll(): Observable<Score[]> {
         return this.repository.stream().pipe(
             toArray(),
+            tap(x => console.log('with-date-findall', x)),
         )
     }
 

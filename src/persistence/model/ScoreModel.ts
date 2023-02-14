@@ -17,7 +17,12 @@ export class ScoreModel {
 
     @Prop()
     playingTime: number;
-    //  submitedAt: Date;
+
+    @Prop({
+        type: Date
+    })
+    submitedAt: Date;
+
 }
 
 export const ScoreSchema = SchemaFactory.createForClass(ScoreModel);

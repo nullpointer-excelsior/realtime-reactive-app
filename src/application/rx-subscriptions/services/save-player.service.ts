@@ -18,7 +18,7 @@ export class SavePlayerService implements OnModuleInit {
         Logger.log('save-player STARTED')
 
         this.score.onSaved().pipe(
-            tap(score => console.log('save-player-from-score', score)),
+            // tap(score => console.log('save-player-from-score', score)),
             switchMap(score => {
                 return this.player
                     .findByName(score.player)

@@ -30,7 +30,7 @@ export class ScoreMongoRepository implements ScoreRepository {
                 score.player, 
                 playingTime: score.playingTime, 
                 points: score.points, 
-                submitedAt: null 
+                submitedAt: score.submitedAt 
             }))
         )
 
