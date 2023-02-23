@@ -24,9 +24,8 @@ export class SavePlayerService implements OnModuleInit {
                     .findByName(score.player)
                     .pipe(
                         defaultIfEmpty(Player.create({ name: score.player, points: 0 })),
-                        map(player => {
+                        tap(player => {
                             player.addPoints(score.points)
-                            return player
                         })
                     )
             }),

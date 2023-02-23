@@ -1,4 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { tap } from "rxjs";
 import { RankingService } from "../../../domain/services/ranking.service";
 import { PubSubService } from "../../graphql-server/services/pubsub.service";
 

@@ -37,7 +37,6 @@ export class PlayerService extends ReactiveBase {
                 )
             }),
             switchMap(doc => doc ? this.repository.update(player) : this.repository.create(player)),
-            retry({ count: 3, delay: 3000 }),
             tap(player => this.source.emit(player))
         )
 

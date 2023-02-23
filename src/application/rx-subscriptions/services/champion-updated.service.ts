@@ -13,12 +13,14 @@ export class ChampionUpdatedService implements OnModuleInit {
     
     onModuleInit() {
 
+        Logger.log('champion-updated STARTED')
+
         this.ranking.onSaved().pipe(
             mergeMap(rankings => rankings),
             filter(ranking => ranking.place === 1),
             distinctUntilKeyChanged('player'),
             map(ranking => ({ player: ranking.player, points: ranking.points, datetime: new Date() })),
-            tap(champion => Logger.log('Current Champion',champion))
+            tap(champion => Logger.log('Current Champion ',champion))
         )
             .subscribe(champion => this.pubsub.publishCurrentChampion(champion))
     }

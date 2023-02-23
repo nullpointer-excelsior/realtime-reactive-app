@@ -36,4 +36,4 @@ while True:
         print('[x] Server is down...')
         print(err)
     
-    time.sleep(3)
+    time.sleep(1)

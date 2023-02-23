@@ -25,6 +25,8 @@ export class SaveRankingService implements OnModuleInit {
             switchMap(rankings => this.ranking.save(rankings))
         )
 
+        this.ranking$.subscribe()
+
     }
 
 
